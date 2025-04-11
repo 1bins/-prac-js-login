@@ -25,7 +25,6 @@ export const login = async () => {
         localStorage.setItem('token', response.data.token);
         alert('로그인되었습니다');
         location.href = "./page/login.html";
-        // TODO:: 이벤트 버블링 제어하기
     }
     catch (error) {
         let message = error.message || '로그인이 실패하였습니다';
