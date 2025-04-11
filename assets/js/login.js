@@ -18,7 +18,7 @@ export const login = async () => {
 
         if (response.status === 200 && response.data.token) {
             // 토큰을 로컬스토리지에 저장하기
-            sessionStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.token);
             alert('로그인되었습니다');
             location.href = "./page/login.html";
             // TODO:: 이벤트 버블링 제어하기
@@ -43,12 +43,11 @@ export const login = async () => {
  * 페이지 상단 스크립트에 window.onload = () => { checkLogin() }으로 로그인체크
  * */
 export const checkLogin = async () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
     if (!token) {
         alert('로그인이 필요합니다');
         location.href = "/";
-        // TODO::페이지 이동기능 추가
     }
 
     try {
@@ -72,7 +71,7 @@ export const checkLogin = async () => {
  * 로그아웃 기능
  * */
 export const logout = () => {
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
     alert('로그아웃 되었습니다');
     location.href = '/';
 }
