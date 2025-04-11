@@ -1,5 +1,7 @@
 import { baseURL, $, loginValidator } from "./utils.js";
 
+let user = {};
+
 /**
  * 로그인 기능
  * */
@@ -16,22 +18,20 @@ export const login = async () => {
             password: userPw.value
         });
 
-        if (response.status === 200 && response.data.token) {
-            // 토큰을 로컬스토리지에 저장하기
-            localStorage.setItem('token', response.data.token);
-            alert('로그인되었습니다');
-            location.href = "./page/login.html";
-            // TODO:: 이벤트 버블링 제어하기
-        } else {
-            throw new Error();
-        }
+        const token = response.data.token;
+        if (!token) throw new Error("로그인이 실패하였습니다");
+
+        // 토큰을 로컬스토리지에 저장하기
+        localStorage.setItem('token', response.data.token);
+        alert('로그인되었습니다');
+        location.href = "./page/login.html";
+        // TODO:: 이벤트 버블링 제어하기
     }
     catch (error) {
-        let message = '로그인이 실패하였습니다';
+        let message = error.message || '로그인이 실패하였습니다';
         if (error.response && error.response.status === 401) {
             message = '아이디 또는 비밀번호가 틀렸습니다'
         }
-
         alert(message);
     }
 }
@@ -56,10 +56,7 @@ export const checkLogin = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
-
-        if (response.status !== 200) {
-            throw new Error();
-        }
+        user = response.data;
     }
     catch (error) {
         let message = '로그인을 다시 해주세요';
